@@ -1,32 +1,18 @@
 import React, { useState, useCallback } from 'react'
 import Button from './Button'
 import TextField from './TextField'
-import RadioButtonGroup from './RadioButtonGroup'
-import styled from 'styled-components'
 import { Label } from 'office-ui-fabric-react/lib/Label'
 import { haiku as mockhaiku } from '../mockdata'
 import { connect } from 'react-redux'
 import { alterHaiku } from '../actions/actions'
 import { channels as chnl } from '../channels'
-import { BrowserWindow } from 'electron'
-
-const FormContainer = styled.form`
-   background-color: oldlace;
-   box-shadow: 0px 0px 6px 6px #88888873;
-   width: 70%;
-   margin: auto;
-   margin-top: 40px;
-   padding: 30px;
-`
-const GenerateBtnDiv = styled.div`
-   margin: auto;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-`
-const SelectorDiv = styled.div`
-   margin-left: 2rem;
-`
+import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup'
+import {
+   FormContainer,
+   GenerateBtnDiv,
+   SelectorDiv,
+   RadioBtnDiv,
+} from './StyledFormComponents'
 
 const options = [
    {
@@ -85,13 +71,14 @@ const Form = ({ onGenerateClick, haikuprop, dispatch, ...props }) => {
       <FormContainer onSubmit={e => e.preventDefault()}>
          <h3>Select one text source:</h3>
          <SelectorDiv>
-            <RadioButtonGroup
-               disabled={radioDisabled}
-               label="Generate haiku from the first pages of"
-               options={options}
-               onClick={() => handleRadioClicked()}
-               onChange={handleRadioButtonChange}
-            />
+            <RadioBtnDiv onClick={handleRadioClicked}>
+               <Label>Generate haiku from the first pages of</Label>
+               <ChoiceGroup
+                  options={options}
+                  disabled={radioDisabled}
+                  onChange={handleRadioButtonChange}
+               />
+            </RadioBtnDiv>
             <div onClick={() => handleInputClicked()}>
                <TextField
                   disabled={inputDisabled}
@@ -103,7 +90,7 @@ const Form = ({ onGenerateClick, haikuprop, dispatch, ...props }) => {
                   rows={4}
                />
             </div>
-            <p onClick={() => handleOpenClicked()}>
+            <p onClick={handleOpenClicked}>
                <Label>Or generate from the contents of a .txt file:</Label>
                <Button children="Open file" disabled={openDisabled} />
             </p>
@@ -124,14 +111,13 @@ const mapStateToProps = (state, ownProps) => {
    return { haikuprop: state.haikustore.haiku }
 }
 
+export default connect(mapStateToProps)(Form)
+
 // const mapDispatchToProps = dispatch => {
 //    return {
 //       onGenerateClick: newHaiku => dispatch(alterHaiku(newHaiku)),
 //    }
 // }
-
-export default connect(mapStateToProps)(Form)
-
 // const mapStateToProps = (state, ownProps) => ({
 //    // ... computed data from state and optionally ownProps
 // })

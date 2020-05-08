@@ -17,6 +17,6 @@ export const ALTER_HAIKU = 'ALTER_HAIKU'
  *
  * action creators
  */
-export function alterHaiku(haiku) {
-   return { type: ALTER_HAIKU, haiku }
+export function alterHaiku(data) {
+   return { type: ALTER_HAIKU, data }
 }
